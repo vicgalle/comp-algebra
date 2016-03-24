@@ -1,0 +1,76 @@
+
+# Euclides algorithm
+
+mcd:= overload (
+	[
+	proc(a::integer, b::integer, p::integer) option overload; 
+		local c,d,r;
+		if nargs = 2 then #Caso R=Z
+			c,d:= abs(a),abs(b);
+			while d<>0 do
+	   			r:= irem(c,d); #r = c mod d 
+	   			c,d:= d,r;
+			od;
+			return abs(c); #Devolvemos el positivo
+		elif nargs = 3 then #Caso R=Zp
+			c:= a mod p; d:= b mod p;
+			while d<>0 do
+				r:= irem(c,d) mod p;
+				c,d:= d,r;
+			od;
+			return c mod p; #Devolvemos tomando módulo
+		else
+			error("Número de argumentos erróneo");
+		end if;
+	end,
+	proc(a::complex(integer),b::complex(integer)) option overload; #Caso R=Z[i]
+		local c,d,r;
+		if nargs > 2 then
+			error("Número de argumentos erróneo");
+		end if;
+		with(GaussInt,GIrem); #Importamos la función GIrem de la libreria GaussInt
+		with(GaussInt,GInormal); #Importamos la función GInormal de la libreria GaussInt
+		c,d:= a,b;
+		while d<>0 do
+			r:= GIrem(c,d); #r = c mod d 
+			c,d:= d,r;
+		od;
+		return GInormal(c); #Devolvemos el normalizado al primer cuadrante
+	end,
+	proc(a::polynom(rational),b::polynom(rational),p::integer) option overload; 
+		local c,d,r,s,X;
+		s:= indets(a) union indets(b);								
+		if (nops(s) > 1 or nops(s) < 1) then
+			error("Los polinomios no están en Q[X]"); 
+		end if;
+		X := s[1]; #Incógnita
+		if nargs = 2 then #Caso R=Q[X]
+			c,d:= a,b;
+			#Averiguamos la incógnita en la que están los polinomios, para permitir polinomios en x, y o cualquier otra
+			sort(c); sort(d); #Ordenamos los polinomios
+			while degree(d) >=0 do
+			   r:= rem(c,d,X); #r = c mod d 
+			   c,d := d,r;
+			od;
+			return (c/lcoeff(c)); #Devolvemos el mónico correspondiente
+		elif nargs = 3 then  #Caso R=Zp[X]
+			if not (type(a,polynom(integer)) or type(b,polynom(integer))) then
+				error("No se toma módulo en Q");
+			end if;
+			c:= a mod p; sort(c);
+			d:= b mod p; sort(d);
+			while degree(d)>=0 do
+			   r:= rem(c,d,X) mod p; #r = c mod d 
+			   c,d:= d,r;
+			od;
+			return (c*(1/(lcoeff(c) mod p) mod p) mod p); #Devolvemos el polinomio mónico equivalente, multiplicando por el inverso, 
+												 #teniendo en cuenta que (1/X mod Y) mod Y es el inverso de X modulo Y
+		else
+			error("Número de argumentos erróneo");
+		end if;
+	end,
+	proc() option overload; 
+		error("No está definida la operación");
+	end
+	]
+):
