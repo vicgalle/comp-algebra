@@ -74,3 +74,22 @@ mcd:= overload (
 	end
 	]
 ):
+
+# Case Fq[X] with q=p^n, n>1. The 'external' polynomial has to be in x.
+
+mcdq := proc(a::polynom, b::polynom, p::integer, f::polynom)
+	local c,d,r,alpha;
+	
+	c,d := sort(a,'x'),sort(b,'x');
+	alpha := RootOf(f);
+	while degree(d)>=0 do
+		r := evala(Rem(c,d,'x'));
+		c,d := d,r;
+	od;
+	c := evala(primpart(c,'x'));
+	if lcoeff(lcoeff(c,'x')) < 0 then
+		c:=c*(-1);
+	fi;
+	return c; # Devolvemos la parte primitiva para que quede
+		  # más simple, y de forma que el primer coef no tenga -.
+end:
