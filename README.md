@@ -21,13 +21,11 @@ For example, gcd(126,35):
 
 Execution of examples that use mcd in euclides.wms:
 
-Inline-style: 
 ![alt Euclides examples](https://github.com/Ana06/comp-algebra/blob/master/images/euclides.jpg "Euclides examples")
 
 
 Execution of examples that use mcdq in euclides.wms (case Fq[X]). For example, we work in F16[X]:
 
-Inline-style: 
 ![alt Euclides examples in Fq[X]](https://github.com/vicgalle/comp-algebra/blob/master/images/euclidesFq.PNG "Euclides examples in Fq[X]")
 
  
