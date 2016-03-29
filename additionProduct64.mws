@@ -1,0 +1,51 @@
+
+# Addition and product in base 64.
+
+# Numbers are unsigned and represented as integer lists. Take into
+# consideration that the most significant position is the first in the right.
+
+suma264 := proc(a::list(integer),b::list(integer))
+	local r,carry,n,n1,n2,i;
+	n1,n2 := numelems(a),numelems(b);
+	carry := 0;
+	n:= min(n1,n2);
+	r := [seq(0,i=1..n)];
+	for i from 1 to n do
+		r[i]:= a[i] + b[i] + carry;
+		if r[i] >= 2^64 then
+			r[i]:= r[i] - 2^64; 
+			carry:= 1;
+		else carry:= 0;
+		end if;
+	od;
+	if n1 > n then
+		r:= [op(r), op(a[n+1..n1])];
+	elif n2 > n then
+		r:= [op(r), op(b[n+1..n2])];
+	elif carry > 0 then
+		r := [op(r),carry];
+	end if;
+	return r;
+end: 
+
+
+producto264 := proc(a::list(integer),b::list(integer))
+	local sum,sum_aux,i,j,n1,n2,num,num_64,carry;
+	n1,n2 := numelems(a),numelems(b);
+	sum := [];
+	for j from 1 to n1 do
+		carry:=0;
+		sum_aux :=  [seq(0,i=1..j-1)];
+		for i from 1 to n2 do
+			num := a[j]*b[i]+carry;
+			num_64 := num mod 2^64;
+			carry := iquo(num,2^64);
+			sum_aux := [op(sum_aux),num_64];
+		od;
+		if carry > 0 then
+			sum_aux := [op(sum_aux),carry];
+		end if;
+		sum := suma264(sum,sum_aux);
+	od;
+	return sum;
+end:

@@ -28,6 +28,18 @@ Execution of examples that use mcdq in euclides.wms (case Fq[X]). For example, w
 
 ![alt Euclides examples in Fq[X]](https://github.com/vicgalle/comp-algebra/blob/master/images/euclidesFq.PNG "Euclides examples in Fq[X]")
 
+
+## additionProduct64.wms
+
+
+**Addition and product in base 64.**
+
+Numbers are unsigned and represented as integer lists. Take into consideration that the most significant position is the first in the right.
+
+Execution of examples that use functions in additionProduct64.wms:
+
+![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.JPG "Addition and product in base 64 examples")
+ 
  
 ## Authors
 
@@ -38,5 +50,4 @@ This project is being developed by Ana María Martínez Gómez and Víctor Adolf
 ## Licence
 
 Code published under MIT License (see [LICENSE](LICENSE))
-
 
