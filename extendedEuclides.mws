@@ -1,0 +1,129 @@
+# Extended Euclidean algorithm
+
+euclext:= overload (
+	[
+	proc(a::integer, b::integer, p::integer) option overload;
+		local c,d,r,f,g,rho,s,t,i,q,l;
+		if nargs = 2 then  #Caso R=Z
+			r := [a,b];
+			s := [1, 0];
+			t := [0, 1];
+			i := 2;
+			q := [];
+			while r[i] <> 0 do
+	   			q := [op(q), iquo(r[i-1],r[i])];
+	   			r := [op(r), (r[i-1] - q[i-1]*r[i])];
+	   			s := [op(s), (s[i-1] - q[i-1]*s[i])];
+	   			t := [op(t), (t[i-1] - q[i-1]*t[i])];
+	   			i := i+1;
+			od;
+			l := i-2;
+			printf("l=%a, r=%a, s=%a, t=%a, q=%a\n\n",l,r,s,t,q);
+			printf("%a=%a*%a+%a*%a",r[l+1],s[l+1],a,t[l+1],b);
+			return s[l+1],t[l+1]; # Para usarlo en otros algoritmos
+		elif nargs = 3 then #Caso R=Zp
+			r := [a, b] mod p;
+			s := [1, 0];
+			t := [0, 1];
+			i := 2;
+			q := [];
+			while r[i] <> 0 do
+	   			q := [op(q), iquo(r[i-1],r[i]) mod p];
+	   			r := [op(r), (r[i-1] - q[i-1]*r[i]) mod p];
+	   			s := [op(s), (s[i-1] - q[i-1]*s[i]) mod p];
+	   			t := [op(t), (t[i-1] - q[i-1]*t[i]) mod p];
+	   			i := i+1;
+			od;
+			l := i-2;
+			printf("l=%a, r=%a, s=%a, t=%a, q=%a\n\n",l,r,s,t,q);
+			printf("%a=%a*%a+%a*%a",r[l+1],s[l+1],a,t[l+1],b);
+		else
+			error("Número de argumentos erróneo");
+		end if;
+	end,
+	proc(a::complex(integer),b::complex(integer)) option overload; #Caso R=Z[i]
+		local r,s,t,i,q,l;
+		if nargs > 2 then
+			error("Número de argumentos erróneo");
+		end if;
+		with(GaussInt,GIquo); #Importamos la función GIquo de la libreria GaussInt
+		r := [a, b];
+		s := [1, 0];
+		t := [0, 1];
+		i := 2;
+		q := [];
+		while r[i] <> 0 do
+   			q := [op(q), GIquo(r[i-1],r[i])];
+   			r := [op(r), (r[i-1] - q[i-1]*r[i])];
+   			s := [op(s), (s[i-1] - q[i-1]*s[i])];
+   			t := [op(t), (t[i-1] - q[i-1]*t[i])];
+   			i := i+1;
+		od;
+		l := i-2;
+		printf("l=%a, r=%a, s=%a, t=%a, q=%a\n\n",l,r,s,t,q);
+		printf("%a=(%a)*(%a)+(%a)*(%a)",r[l+1],s[l+1],a,t[l+1],b);
+	end,
+	proc(a::polynom(rational),b::polynom(rational),p::integer) option overload; 
+		local c,d,r,s,X,rho,l,t,i,q;
+		s:= indets(a) union indets(b);								
+		if (nops(s) > 1 or nops(s) < 1) then
+			error("Los polinomios no están en Q[X]"); 
+		end if;
+		X := s[1]; #Incógnita
+		if nargs = 2 then #Caso R=Q[X]
+			rho := [lcoeff(a), lcoeff(b)];
+			r := [a/lcoeff(a), b/lcoeff(b)];
+			s := [1/rho[1], 0];
+			t := [0, 1/rho[2]];
+			i := 2;
+			q := [];
+			while r[i] <> 0 do
+	   			q := [op(q), simplify(quo(r[i-1],r[i],X))];
+	   			rho := [op(rho), lcoeff(simplify(r[i-1]-q[i-1]*r[i]))];
+	   			if rho[i+1] = 0 then 
+	   				rho[i+1] := 1; # Queremos que leadingUnit(0) = 1
+	   			end if; 
+	   			r := [op(r), simplify((r[i-1] - q[i-1]*r[i])/rho[i+1])];
+	   			s := [op(s), simplify((s[i-1] - q[i-1]*s[i])/rho[i+1])];
+	   			t := [op(t), simplify((t[i-1] - q[i-1]*t[i])/rho[i+1])];
+	   			i := i+1;
+			od;
+			l := i-2;
+			printf("l=%a, rho=%a, r=%a, s=%a, t=%a, q=%a\n\n",l,rho,r,s,t,q);
+			printf("(%a)=(%a)*(%a)+(%a)*(%a)",r[l+1],s[l+1],a,t[l+1],b);
+		elif nargs = 3 then  #Caso R=Zp[X]
+			if not (type(a,polynom(integer)) or type(b,polynom(integer))) then
+				error("No se toma módulo en Q");
+			end if;
+			rho := [lcoeff(a), lcoeff(b)] mod p;
+			r := [a/lcoeff(a), b/lcoeff(b)] mod p;
+			s := [1/rho[1] mod p, 0];
+			t := [0, 1/rho[2] mod p];
+			i := 2;
+			q := [];
+			while r[i] <> 0 do
+	   			q := [op(q), simplify(quo(r[i-1],r[i],X)) mod p];
+	   			rho := [op(rho), lcoeff(simplify(r[i-1]-q[i-1]*r[i])) mod p];
+	   			if rho[i+1] = 0 then 
+	   				rho[i+1] := 1; # Queremos que leadingUnit(0) = 1
+	   			end if; 
+	   			r := [op(r), simplify((r[i-1] - q[i-1]*r[i])/rho[i+1]) mod p];
+	   			s := [op(s), simplify((s[i-1] - q[i-1]*s[i])/rho[i+1]) mod p];
+	   			t := [op(t), simplify((t[i-1] - q[i-1]*t[i])/rho[i+1]) mod p];
+	   			i := i+1;
+			od;
+			l := i-2;
+			printf("l=%a, rho=%a, r=%a, s=%a, t=%a, q=%a\n\n",l,rho,r,s,t,q);
+			printf("(%a)=(%a)*(%a)+(%a)*(%a)",r[l+1],s[l+1],a,t[l+1],b); 
+			return [s[l+1], t[l+1]];
+		else
+			error("Número de argumentos erróneo");
+		end if;
+		end,
+		proc() option overload; 
+			error("No está definida la operación");
+		end
+
+	]
+	
+):

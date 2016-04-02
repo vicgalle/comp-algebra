@@ -3,7 +3,7 @@
 Fundamental Computer Algebra algorithms implemented in Maple
 
 
-## euclides.wms
+## euclides.mws
 
 
 **Euclides algorithm for Z, Zp, Z[i], Q[X], Fp[X] and Fq[X] with q=p^n.**
@@ -12,7 +12,7 @@ Fundamental Computer Algebra algorithms implemented in Maple
  Euclides algorithm calculates the gcd of two elements using the subtraction operation.
  
  
-For example, gcd(126,35):
+(*) For example, gcd(126,35):
 126 = 3*35 + 21;
 35   = 1*21 + 14;
 21   = 1*14 + 7;
@@ -28,8 +28,18 @@ Execution of examples that use mcdq in euclides.wms (case Fq[X]). For example, w
 
 ![alt Euclides examples in Fq[X]](https://github.com/vicgalle/comp-algebra/blob/master/images/euclidesFq.PNG "Euclides examples in Fq[X]")
 
+## extendedEuclides.mws
 
-## additionProduct64.wms
+**Extended euclidean algorithm**
+
+It computes the gcd of the given inputs and represents it as a linear combination, following the equalities (*) in the previous section in ascending order.
+
+Some examples that use this function:
+
+![alt Extended Euclides examples](https://github.com/vicgalle/comp-algebra/blob/master/images/extendedEuclides.PNG "Extended Euclides examples")
+
+
+## additionProduct64.mws
 
 
 **Addition and product in base 64.**
