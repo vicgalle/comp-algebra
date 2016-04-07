@@ -19,14 +19,15 @@ Fundamental Computer Algebra algorithms implemented in Maple
 14   = 2*7 ;
 
 
-Execution of examples that use mcd in euclides.wms:
+Execution of examples that use mcd in euclides.mws:
 
 ![alt Euclides examples](https://github.com/Ana06/comp-algebra/blob/master/images/euclides.jpg "Euclides examples")
 
 
-Execution of examples that use mcdq in euclides.wms (case Fq[X]). For example, we work in F16[X]:
+Execution of examples that use mcdq in euclides.mws (case Fq[X]). For example, we work in F16[X]:
 
 ![alt Euclides examples in Fq[X]](https://github.com/vicgalle/comp-algebra/blob/master/images/euclidesFq.PNG "Euclides examples in Fq[X]")
+
 
 ## extendedEuclides.mws
 
@@ -46,10 +47,27 @@ Some examples that use this function:
 
 Numbers are unsigned and represented as integer lists. Take into consideration that the most significant position is the first in the right.
 
-Execution of examples that use functions in additionProduct64.wms:
+Execution of examples that use functions in additionProduct64.mws:
 
 ![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.JPG "Addition and product in base 64 examples")
  
+
+## polynomialIrreducibilityTest.mws
+
+Finite field polynomial test of irreducibility.
+
+
+We use that a polynomial f is irreducible if and only if:
+
+(i) f divide x^(q^n)-x, y
+
+(ii) gcd(x^(q^n/t)-x,f) = 1 fot all prime divisor t of n
+
+
+Execution of examples that use functions in polynomialIrreducibilityTest.mws:
+
+![alt Finite field polynomial test of irreducibility examples](https://github.com/Ana06/comp-algebra/blob/master/images/polynomialIrreducibilityTest.PNG "Finite field polynomial test of irreducibility examples")
+
  
 ## Authors
 

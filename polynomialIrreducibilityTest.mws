@@ -1,0 +1,135 @@
+
+# Auxiliar - repeated squaring algorithm.
+repsquaring :=  overload (
+	[
+	proc(a::integer, n::integer, p::integer) option overload; # For integers
+	local nn,k,i,b;
+	if n = 1 then
+		return (a mod p);
+	elif n = 0 then
+		return 1;
+	fi;
+	nn := convert(n, base, 2);
+	k := floor(log[2](n));
+	b := a;
+	for i from k-1 by -1 to 0 do
+		if nn[i+1] = 1 then
+			b := b^2*a mod p;
+		else b := b^2 mod p;
+		fi;
+	od;
+
+	end,
+	proc(a, n::integer, f::polynom) option overload; # For polynomials
+	local nn,k,i,b;
+	if n = 1 then
+		return rem(a,f,indets(f)[1]);
+	elif n = 0 then
+		return 1;
+	fi;
+	nn := convert(n, base, 2);
+	k := floor(log[2](n));
+	b := a;
+	for i from k-1 by -1 to 0 do
+		if nn[i+1] = 1 then
+			b := rem(b^2*a,f,indets(f)[1]);
+		else b := rem(b^2,f,indets(f)[1]);
+		fi;
+	od;
+	end,
+	proc(a, n::integer, f::polynom, g::polynom) option overload; # For polynomials over Fq[X]
+	local nn,k,i,b,alpha;
+
+	alpha:=RootOf(g);
+	if n=1 then return evala(Rem(a,f,indets(f)[1]));
+	elif n=0 then return 1;
+	fi;
+
+	nn := convert(n, base, 2);
+	k := floor(log[2](n));
+	b := a;
+	for i from k-1 by -1 to 0 do
+		if nn[i+1] = 1 then
+			b := evala(Rem(b^2*a,f,indets(f)[1]));
+		else b := evala(Rem(b^2,f,indets(f)[1]));
+		fi;
+	od;
+	end
+	]
+):
+
+
+# Auxiliar - Fast modular composition. It calculates g(h) mod f
+comp_modular := proc(f::polynom, g::polynom, h::polynom)
+	# f,g,h € R[x] 	deg(g), deg(h) < deg(f) = n f!=0 monic
+	
+	local x,m,n,A,B,C,b,deg_pot,i,pot,k,j,ri;
+	x := indets(f)[1];
+	n := degree(f);
+	
+	m := ceil(sqrt(n));
+	A := Matrix(m,n);
+	B := Matrix(m,m);
+	for i from 1 to m do
+		# we use the repeated squaring algorithm to calculate h^i rem f
+		pot := repsquaring(h, i-1, f);
+		deg_pot := degree(pot);
+		for k from 0 to deg_pot do
+			# The rows of the matix A are the coficients of 1, h rem f, h^2 rem f,....
+			A[i,k+1] := coeff(pot,x,k);
+		od;
+		for j from 1 to m do
+			# g = Eg_i*x^(mi) g_0...g_m-1
+			# G is formed by the the coficients of g_i
+			B[i,j] := coeff(g,x,(j-1)+(i-1)*m);
+		od;
+	od;
+	C:=B.A;
+	b:=0;
+	for i from 1 to m do
+		ri:=0;
+		for j from 1 to n do
+			#ri is the polynomial whose coficients are the coficients of the ith row of BA
+			ri:= ri + C[i,j]*x^(j-1);
+		od;
+		# b=Er_i*(h^m)^i rem f
+		b := rem(expand(b+ri*((h^m)^(i-1))),f,x);
+	od;
+	return b;
+
+end:
+
+
+irreducible := proc(f::polynom,q::integer)
+	local x, pot, a, factors, n, num, b, i;
+	x := indets(f)[1];
+	n := degree(f);
+	
+	# we use the repeated squaring algorithm to calculate x^q mod f
+	pot := repsquaring(x, q, f);
+
+	# we use the fast modular composition algorithm to calculate a = x^(q^n) mod f
+	a:=pot;
+	for i from 1 to n-1 do
+		a := comp_modular(f,pot,a) mod q;
+	od;
+	if a <> x then #(i)
+		return "reducible";
+	fi;
+
+	#(ii)
+	factors := numtheory[factorset](n);
+	num := numelems(factors);
+	for i from 1 to num do
+		# we use the fast modular composition algorithm to calculate b = x^(q^n/t) mod f
+		b:=pot;
+		for i from 1 to ((n/factors[i])-1) do
+			b := comp_modular(f,pot,b) mod q;
+		od;
+		if mcd(b-x,f,q) <> 1 then
+			return "reducible";
+		fi;
+	od;
+	return "irreducible";
+
+end:
