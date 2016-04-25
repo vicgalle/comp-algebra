@@ -42,6 +42,7 @@ Some examples that use this function:
 
 ## additionProduct64.mws
 
+
 **Addition and product in base 64.**
 
 Numbers are unsigned and represented as integer lists. Take into consideration that the most significant position is the first in the right.
@@ -51,18 +52,6 @@ Execution of examples that use functions in additionProduct64.mws:
 ![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.JPG "Addition and product in base 64 examples")
  
 
-## chineseRemainder.mws
-
-**Algorithm to compute the Chinese Remainder Theorem**
-
-Given m0, ... , mr-1 integers and pairwise coprime, and v0, ... , vr-1 arbitrary integers, the algorithm obtains the unique f such that f = vi mod mi for all i.
-
-Example that use the cr function. We want to find the unique two digit natural number which is 2 mod 11 and 7 mod 13. This can be possible due to the fact that the map X(f) = (f mod 11, f mod 13) = (2 mod 11, 7 mod 13) in Z_11 x Z_13 is surjective. In addition, Z_m is isomorph to Z_m0 x ... x Z_mr-1 where m = m0...mr_1 and its factors and pairwise coprime.
-
-![alt Chinese remainder examples](https://github.com/vicgalle/comp-algebra/blob/master/images/chineseRemainder.JPG "Chinese remainder example")
-
-
- 
 ## polynomialIrreducibilityTest.mws
 
 Finite field polynomial test of irreducibility.
