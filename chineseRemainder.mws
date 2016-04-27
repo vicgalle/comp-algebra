@@ -1,0 +1,20 @@
+cr:= proc(a::list(integer),b::list(integer))
+	local m,mm,v,r,c,quos,i,s,t;
+	m,v:= a,b;
+	r := numelems(m);
+	if r <> numelems(v) then
+		error("No se puede aplicar el algoritmo");
+	end if;
+	c := [seq(0,i=1..r)];
+	quos := [seq(0,i=1..r)];
+	mm:= mul(m);
+	for i from 1 to r do
+		quos[i] := iquo(mm,m[i]);
+		s,t := euclext(quos[i], m[i]);
+		c[i] := irem(v[i]*s,m[i]) mod m[i];
+	od;
+	with(ListTools,DotProduct);
+	print(c);
+	print(quos);
+	return DotProduct(c,quos);
+end:
