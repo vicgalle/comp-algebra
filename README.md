@@ -59,10 +59,9 @@ Given m0, ... , mr-1 integers and pairwise coprime, and v0, ... , vr-1 arbitrary
 
 Example that use the cr function. We want to find the unique two digit natural number which is 2 mod 11 and 7 mod 13. This can be possible due to the fact that the map X(f) = (f mod 11, f mod 13) = (2 mod 11, 7 mod 13) in Z_11 x Z_13 is surjective. In addition, Z_m is isomorph to Z_m0 x ... x Z_mr-1 where m = m0...mr_1 and its factors and pairwise coprime.
 
-![alt Chinese remainder examples](https://github.com/vicgalle/comp-algebra/blob/master/images/chineseRemainder.JPG "Chinese remainder example")
+![alt Chinese remainder examples](https://github.com/vicgalle/comp-algebra/blob/master/images/chineseRemainder.PNG "Chinese remainder example")
 
 
- 
 ## polynomialIrreducibilityTest.mws
 
 Finite field polynomial test of irreducibility.
@@ -88,5 +87,5 @@ This project is being developed by Ana María Martínez Gómez and Víctor Adolf
 
 ## Licence
 
-Code published under MIT License (see [LICENSE](LICENSE))
+Code published under MIT License (see [LICENSE](LICENSE)).
 
