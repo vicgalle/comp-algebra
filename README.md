@@ -51,6 +51,33 @@ Execution of examples that use functions in additionProduct64.mws:
 
 ![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.JPG "Addition and product in base 64 examples")
  
+ 
+## chineseRemainder.mws
+
+**Algorithm to compute the Chinese Remainder Theorem**
+
+Given m0, ... , mr-1 integers and pairwise coprime, and v0, ... , vr-1 arbitrary integers, the algorithm obtains the unique f such that f = vi mod mi for all i.
+
+Example that use the cr function. We want to find the unique two digit natural number which is 2 mod 11 and 7 mod 13. This can be possible due to the fact that the map X(f) = (f mod 11, f mod 13) = (2 mod 11, 7 mod 13) in Z_11 x Z_13 is surjective. In addition, Z_m is isomorph to Z_m0 x ... x Z_mr-1 where m = m0...mr_1 and its factors and pairwise coprime.
+
+![alt Chinese remainder examples](https://github.com/vicgalle/comp-algebra/blob/master/images/chineseRemainder.PNG "Chinese remainder example")
+
+
+
+## modularEuclides.mws
+
+**Modular Euclides algorithm (big prime version)**
+
+Input: polinomios primitivos f,g en Z[x] con deg(f)=n>=deg(g)>=1 y maxnorm(f), maxnorm(g) <= A.
+Este algoritmo elige un primo grande p, calcula el mcd mod p y recupera el mcd en Z[X] desde el mcd en Fp[X]. Si falla, se repite con otro primo p.
+
+Input: primitive polynomials f,g in Z[x] with deg(f)=n>=deg(g)>=1 and maxnorm(f), maxnorm(g) <= A.
+This algorithm chooses a big prime p, computes the gcd mod p and then it obtains the gcd in Z[x]. If it fails, then it repeats using another prime p.
+
+Examples that use the modeuc function.
+
+![alt Modular euclides examples](https://github.com/vicgalle/comp-algebra/blob/master/images/modularEuclides.PNG "Modular euclides examples")
+ 
 
 ## polynomialIrreducibilityTest.mws
 

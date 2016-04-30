@@ -3,7 +3,7 @@ cr:= proc(a::list(integer),b::list(integer))
 	m,v:= a,b;
 	r := numelems(m);
 	if r <> numelems(v) then
-		error("No se puede aplicar el algoritmo");
+		error("Cannot use the algorithm");
 	end if;
 	c := [seq(0,i=1..r)];
 	quos := [seq(0,i=1..r)];

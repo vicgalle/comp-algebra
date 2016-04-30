@@ -1,0 +1,34 @@
+modeuc := proc(f::polynom(integer), g::polynom(integer))
+	local b,n,A,flag,cond,p,ff,gg,B,v,w;
+
+	n := degree(f);
+	b := mcd(lcoeff(f), lcoeff(g)); with(Student[VectorCalculus]): 
+	A := max(Norm(PolynomialTools[CoefficientVector](f, indets(f)[1]), infinity),
+		Norm(PolynomialTools[CoefficientVector](g, indets(f)[1]), infinity)); # We obtain a bound for the infinite norms of the polynomials
+	B := sqrt(n+1)*2^n*A*b;
+
+	flag,cond := 1,1;
+	while flag=1 or cond=1 do
+		if flag=1 then flag:=0;p := nextprime(ceil(evalf(2*B+1))); 
+		else p := nextprime(p);
+		fi;
+		
+		ff := f mod p;
+		gg := g mod p;
+		# We use mods to ensure that each coef is less than p/2
+		# With mods, for example x+36 mod 37 would be represented as x-1.
+		v := mods(Gcd(ff,gg),p);
+		w := mods(expand(b*v),p);
+		ff := mods(expand(Algebraic[Quotient](b*f, w, indets(f)[1], 'characteristic'=p)),p);	
+		gg := mods(expand(Algebraic[Quotient](b*g, w, indets(f)[1], 'characteristic'=p)),p);	
+		
+		if Norm(PolynomialTools[CoefficientVector](ff, indets(f)[1]), 1)*
+			Norm(PolynomialTools[CoefficientVector](w, indets(f)[1]), 1) <= evalf(B) and
+			Norm(PolynomialTools[CoefficientVector](gg, indets(f)[1]), 1)*
+			Norm(PolynomialTools[CoefficientVector](w, indets(f)[1]), 1) <= evalf(B) then
+				cond := 0;
+		fi;
+		
+	od;
+	return primpart(w); # Principal part is returned
+	end:
