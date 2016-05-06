@@ -61,15 +61,11 @@ Given m0, ... , mr-1 integers and pairwise coprime, and v0, ... , vr-1 arbitrary
 Example that use the cr function. We want to find the unique two digit natural number which is 2 mod 11 and 7 mod 13. This can be possible due to the fact that the map X(f) = (f mod 11, f mod 13) = (2 mod 11, 7 mod 13) in Z_11 x Z_13 is surjective. In addition, Z_m is isomorph to Z_m0 x ... x Z_mr-1 where m = m0...mr_1 and its factors and pairwise coprime.
 
 ![alt Chinese remainder examples](https://github.com/vicgalle/comp-algebra/blob/master/images/chineseRemainder.PNG "Chinese remainder example")
-<<<<<<< HEAD
 
 
-=======
->>>>>>> origin/master
 
 ## modularEuclides.mws
 
-<<<<<<< HEAD
 **Modular Euclides algorithm (big prime version)**
 
 Input: polinomios primitivos f,g en Z[x] con deg(f)=n>=deg(g)>=1 y maxnorm(f), maxnorm(g) <= A.
@@ -83,8 +79,16 @@ Examples that use the modeuc function.
 ![alt Modular euclides examples](https://github.com/vicgalle/comp-algebra/blob/master/images/modularEuclides.PNG "Modular euclides examples")
  
 
-=======
->>>>>>> origin/master
+## inverseFq.mws
+
+Inverse of an element in a finite field.
+
+Given a, the algorithm computes b so that a*b = 1 in Fq. We apply the extended euclidean algorithm, using the property that
+gcd(a,p) = 1 = s*a + t*p = s*a mod p
+
+![alt Inverse examples](https://github.com/vicgalle/comp-algebra/blob/master/images/inverse.PNG "Inverse examples")
+
+
 ## polynomialIrreducibilityTest.mws
 
 Finite field polynomial test of irreducibility.
