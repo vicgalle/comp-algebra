@@ -1,0 +1,17 @@
+inv := overload (
+	[
+	proc(a::integer, p::integer) option overload; 
+		# Case Fp
+		local b;
+		b := euclext(a,p);
+		return b[1];
+	end,
+	proc(a::polynom(integer), f::polynom(integer), p::integer) option overload;
+		# Case Fq with q=p^n
+		# f must be an irreducible polynomial of degree n
+		local b;
+		b := euclext(a,f,p);
+		return b[1];
+	end
+	]	
+):
