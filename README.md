@@ -105,10 +105,55 @@ Execution of examples that use functions in polynomialIrreducibilityTest.mws:
 
 ![alt Finite field polynomial test of irreducibility examples](https://github.com/Ana06/comp-algebra/blob/master/images/polynomialIrreducibilityTest.PNG "Finite field polynomial test of irreducibility examples")
 
+
+## finiteFieldFactor.mws
+
+Finite field factorization.
+
+This algorithm computes the factors (with multiplicities) of a polynomial over Fp.
+
+An example:
+
+![alt Finite field factorization](https://github.com/vicgalle/comp-algebra/blob/master/images/finiteFieldFactor.PNG "Finite field factorization")
+
+
+## berlekamp.mws
+
+Berlekamp's factorization algorithm.
+
+Its input is a monic and square-free polynomial f in Fq[x] with q an odd power of a prime number.
+
+An example:
+
+![alt Berlekamp](https://github.com/vicgalle/comp-algebra/blob/master/images/berlekamp.PNG "Berlekamp")
+
+
+## zassenhaus.mws
+
+Zassenhaus factorization algorithm using the Hensel lifting.
+
+Returns the factors of a polynomial f in Z[X] and with lc(f) > 0.
+
+An example:
+
+![alt Zassenhaus](https://github.com/vicgalle/comp-algebra/blob/master/images/zassenhaus.PNG "Zassenhaus")
+
+
+## pollard.mws
+
+This algorithm returns a proper factor of n (or "failure"). It uses the cycle detection trick by Floyd.
+n must not be a composite number nor perfect power.
+
+Some examples:
+
+![alt Pollard](https://github.com/vicgalle/comp-algebra/blob/master/images/pollard.PNG "Pollard")
+
+
+
  
 ## Authors
 
-This project is being developed by Ana María Martínez Gómez and Víctor Adolfo Gallego Alcalá.
+This project has been developed by Ana María Martínez Gómez and Víctor Adolfo Gallego Alcalá.
 
 
 
