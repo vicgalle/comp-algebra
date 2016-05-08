@@ -1,0 +1,123 @@
+# Auxiliar
+henselstep := proc(m::integer, f::polynom, g::polynom, h::polynom, s::polynom, t::polynom)
+	local e,q,r,gg,hh,b,c,d,ss,tt;
+	e:= expand(f - g*h) mod m^2;
+	q := Algebraic[Quotient](s*e, h, indets(f)[1], 'characteristic'=m^2);	
+	r := Algebraic[Remainder](s*e, h, indets(f)[1], 'characteristic'=m^2);
+	gg := expand(g + t*e + q*g) mod m^2;
+	hh := expand(h + r) mod m^2;
+
+	b := expand(s*gg+t*hh-1) mod m^2;
+	c := Algebraic[Quotient](s*b, hh, indets(f)[1], 'characteristic'=m^2);	
+	d := Algebraic[Remainder](s*b, hh, indets(f)[1], 'characteristic'=m^2);
+	ss := expand(s - d) mod m^2;
+	tt := expand(t - t*b - c*gg) mod m^2;
+	return [gg,hh,ss,tt];
+end:
+
+
+# Auxiliar. Taken an integer l and a prime p and f in Z[X] with lc(f) an unity mod p and 
+# f = f=lc(f)*f1*...*fr mod p where fi are monic and pairwise coprime, it returns
+# f*1,...,f*r so that f=lc(f)f*1*...f*r mod p^l y f*i=fi mod p
+
+hensel := proc(f::polynom(integer), ff, p::integer, l::integer)
+	local r, k, d, g, h,i,s,t,j, hs,rr1,rr2;
+
+	r := numelems(ff);
+	if r=1 then
+		return [Algebraic[Quotient](f, lcoeff(f), indets(f)[1], 'characteristic'=p^l)];
+	fi;
+	k,d := floor(r/2),ceil(log[2](l));
+	g,h := lcoeff(f),1;
+	for i from 1 to k do
+		g := expand(g*ff[i]) mod p;		
+	od;
+	for i from k+1 to r do
+		h := expand(h*ff[i]) mod p;
+	od;
+	#st := euclext(g, h, p);
+	Algebraic[ExtendedEuclideanAlgorithm](g,h,indets(g)[1],'s','t','characteristic'=p);
+
+	for j from 1 to d do
+		hs := henselstep(p^(2^(j-1)), f,g,h,s,t);
+		g,h,s,t := hs[1],hs[2],hs[3],hs[4];
+	od;
+
+	rr1,rr2 := hensel(g,ff[1..k],p,l), hensel(h,ff[k+1..r],p,l);
+	return [op(rr1),op(rr2)];
+end:
+
+# The complete factorization algorithm
+facz := proc(f::polynom(integer))
+	local b,n,A,B,C,D,gamma,flag,cond,p,fm,fmp,l,hh,gg, T,s,G,ff,TT,j,gp,hp,jj,DD,i,hhh,nT,breakf;
+	n := degree(f);
+	if n=1 then return {f}; fi;
+
+	b := lcoeff(f); with(Student[VectorCalculus]): 
+	A := Norm(PolynomialTools[CoefficientVector](f, indets(f)[1]), infinity);
+	B := (n+1)^(1/2)*2^n*A*b;
+	C := (n+1)^(2*n)*A^(2*n-1);
+	gamma := ceil(2*log[2](C));
+
+	flag,cond := 1,0;
+	p := 4;
+	D := 2*gamma*ln(gamma);
+	while flag=1 or cond=1 do
+		if flag=1 then flag:=0; fi;
+		p := nextprime(p);
+		fm,fmp := f mod p, diff(fm, indets(f)[1]) mod p;
+		if mcd(f, diff(f,indets(f)[1]), p) = 1 and irem(b,p)<>0 then cond=0;		
+		fi;
+	od;
+	l := ceil(log[p](2*B+1));
+
+	# Modular factorization
+	hh := facfin(Algebraic[Quotient](f, b, indets(f)[1], 'characteristic'=p),p);
+	hhh := [];
+	for i from 1 to numelems(hh) do
+		hhh := [op(hhh), hh[i][1]]; 
+	od;
+
+	# Hensel lifting
+	gg := hensel(Algebraic[Quotient](f, b, indets(f)[1], 'characteristic'=p^l), hhh, p, l);
+	
+	# Factor recombination
+	T,G := {seq(i,i=1..numelems(hhh))}, {};
+	s := 1;
+	ff := f;
+	nT := numelems(T);
+	j := 1;
+	breakf := 0;
+
+	while 2*s <= numelems(T) do
+
+		if breakf < 1 then
+		TT := combinat[choose](T,s);
+		fi;
+		breakf := 0;
+		for j from 1 to numelems(TT) do
+			gp,hp := b,b;
+			for jj from 1 to numelems(TT[j]) do
+				gp := expand(gp * gg[TT[j][jj]]) mod p^l;
+			od;
+			DD := T minus TT[j]; 
+			for jj from 1 to numelems(DD) do
+				hp := expand(hp * gg[DD[jj]]) mod p^l;
+			od;
+			if Norm(PolynomialTools[CoefficientVector](gp, indets(f)[1]), 1)*Norm(PolynomialTools[CoefficientVector](hp, indets(f)[1]), 1)<=evalf(B) then
+				T := T minus TT[j];
+				G := G union {primpart(gp)};
+				ff := primpart(hp);
+				b := lcoeff(ff);
+				breakf := 1;
+				break;
+			fi;
+		od;
+		if breakf < 1 then
+			s := s+1;
+		fi;
+		
+	od;
+
+	return (G union {ff});
+end:	

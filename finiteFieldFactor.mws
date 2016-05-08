@@ -1,0 +1,71 @@
+# Auxiliar: equal-degree splitting. This algorithm returns a proper monic
+# factor of f, or "failure", where f is a monic square-free polynomial
+
+eqdegsplit := proc(f::polynom(integer), q::integer, d::integer)
+	local roll,a,g1,g2,b;
+	
+	roll := rand(0..degree(f)-1);
+	a := roll();
+	a := Randpoly(a, indets(f)[1]) mod q;
+
+	if degree(a)<1 then return "failure"; fi;
+
+	g1 := mcd(a,f,q);
+	if g1 <> 1 then return g1; fi;
+
+	b := repsquaring(a, iquo(q^d-1,2),f);
+	g2 := mcd(b-1,f,q);
+	if g2 <> 1 and g2 <> f then return g2; else return "failure"; fi; 
+end:
+
+
+# Auxiliar: equal-degree factorization. This algorithm computes all the monic and
+# irreducible factors of a monic and square-free polynomial f. d is a number so that
+# it divides deg(f) and all the factors of f have degree d.
+
+eqdegfac := proc(f::polynom(integer), q::integer, d::integer)
+	local g,r1,r2,r,g2;
+	if degree(f)=d then return [f]; fi;
+	g := "failure";
+	while g="failure" do
+		g := eqdegsplit(f,q,d);
+	od;
+
+	r1 := eqdegfac(g,q,d);
+	g2 := Algebraic[Quotient](f, g, indets(f)[1], 'characteristic'=q);
+	r2 := eqdegfac(g2,q,d);
+	r1 := [op(r1),op(r2)];
+	
+end:
+
+# This algorithm computes the factorization (with multiplicities) of some non-constant polynomial f.
+
+facfin := proc(f::polynom(integer),q::integer)
+	local h,v,g,U,flag,gg,e,i,j;
+	h,v := indets(f)[1],f/lcoeff(f);
+	U,i := {},0;
+	flag := 1; #Since there are no DO..WHILE in Maple
+	while v <> 1 or flag=1 do
+	if flag=1 then	flag:=0; fi; 
+	i := i+1;
+	# One distinct-degree factorization step
+	h := repsquaring(h,q,f);
+	g := mcd(h-indets(f)[1],v,q);
+	
+	if g <> 1 then
+		# Equal degree factorization
+		gg := eqdegfac(g,q,i);
+		for j from 1 to numelems(gg) do
+			e := 0;
+			while Algebraic[Remainder](v, gg[j], indets(f)[1], 'characteristic'=q)=0 do
+				v := Algebraic[Quotient](v, gg[j], indets(f)[1], 'characteristic'=q);
+				e := e+1;
+			od;
+			U := U union {[gg[j],e]};	
+
+		od;
+
+	fi;
+	od;
+	
+end:

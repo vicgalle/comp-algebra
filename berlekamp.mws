@@ -1,0 +1,82 @@
+# Berlekamp algorithm in Fq[X], where q a prime number
+
+berlekamp := proc(f::polynom, q::integer)
+	local xq,i,n,l,b,r,Q,roll,a,g1,g2,ind,j,bb;
+	n := degree(f);
+	xq := repsquaring(indets(f)[1], q, f) mod q;
+	
+	l := [[1,0,0]]; # In the for loop, case i=0 (power to 0, which is the unit).
+	l := [op(l), PolynomialTools[CoefficientList](xq, indets(f)[1])];
+	for i from 2 to n-1 do
+		r := repsquaring(xq, i, f) mod q;
+		l := [op(l), PolynomialTools[CoefficientList](r, indets(f)[1])];
+	od;
+	Q := convert(l, Matrix)- Student[LinearAlgebra][Id](n);
+	print(Q);
+	Q := LinearAlgebra[GaussianElimination](Q);
+	print(Q);
+	b := LinearAlgebra[NullSpace](Q);
+	print(b);
+	r := numelems(b); 
+	print(r);
+	for i from 1 to r do
+		bb[i] := PolynomialTools[FromCoefficientVector](b[i],'x');
+	od;
+	
+	a := 0;
+	roll := rand(0..q-1);
+	for i from 1 to r do
+		a := a + bb[i]*roll() mod q;
+	od;
+
+	g1 := mcd(a,f,q);
+	if g1 <> 1 and g1 <> f then return g1; fi;
+
+	b := repsquaring(a, iquo(q-1,2), f) mod q;
+
+	g2 := mcd(b-1,f,q);
+	if g2 <> 1 and g2 <> f then return g2; else return "failure"; fi;	
+	
+end:
+
+# Berlekamp algorithm in Fq[X], where q is p^n for a prime p.
+
+berlekampq := proc(f::polynom, q::integer, g::polynom)
+	local xq,i,n,l,b,r,Q,roll,a,g1,g2,ind,j,bb,alpha;
+	alpha := RootOf(g):
+	n := degree(f);
+	xq := evala(Powmod('x',q,f,'x') mod q);
+	print(xq);
+	l := [[1, seq(0, i = 1 .. n-1)]]; # In the for loop, case i=0 (power to 0, which is the unit).
+	l := [op(l), evala(PolynomialTools[CoefficientList](xq, 'x'))];
+	for i from 2 to n-1 do
+		r := evala(Powmod(xq,i,f,'x') mod q);
+		l := [op(l), evala(PolynomialTools[CoefficientList](r, 'x'))];
+	od;
+	Q := convert(l, Matrix)- Student[LinearAlgebra][Id](n);
+	Q := evala(LinearAlgebra[GaussianElimination](Q));
+	b := evala(LinearAlgebra[NullSpace](Q));
+	print(b);
+	r := numelems(b); 
+	print(r);
+	for i from 1 to r do
+		bb[i] := evala(PolynomialTools[FromCoefficientVector](b[i],'x'));
+	od;
+	
+	a := 0;
+	roll := rand(0..q-1);
+	for i from 1 to r do
+		a := a + bb[i]*roll() mod q;
+	od;
+
+	g1 := evala(Gcd(a,f) mod q);
+	if g1 <> 1 and g1 <> f then return g1; fi;
+
+	if a=0 and iquo(q-1,2)=0 then b:=1;
+	else b := evala(Powmod(a,iquo(q-1,2),f,'x') mod q);
+	fi;
+
+	g2 := evala(Gcd(b-1,f) mod q);
+	if g2 <> 1 and g2 <> f then return g2; else return "failure"; fi;	
+	
+end:

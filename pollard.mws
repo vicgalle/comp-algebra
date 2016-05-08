@@ -1,0 +1,17 @@
+# Returns a proper factor of n, or "failure"
+pollard := proc(n::integer)
+	local x,y,g,N;
+	N := n;
+	x := rand() mod N;
+	y := x;
+	while 1 < 2 do
+		x := irem(x^2 + 1,N);
+		y := irem((y^2+1)^2+1,N);
+		g := gcd(x-y,N);
+		if 1 < g and g < N then
+			return g;
+		elif g = N then
+			error("failure");
+		end if;
+	od;
+end:
