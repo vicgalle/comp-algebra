@@ -21,7 +21,7 @@ Fundamental Computer Algebra algorithms implemented in Maple
 
 Execution of examples that use mcd in euclides.mws:
 
-![alt Euclides examples](https://github.com/Ana06/comp-algebra/blob/master/images/euclides.jpg "Euclides examples")
+![alt Euclides examples](https://github.com/Ana06/comp-algebra/blob/master/images/euclides.PNG "Euclides examples")
 
 
 Execution of examples that use mcdq in euclides.mws (case Fq[X]). For example, we work in F16[X]:
@@ -49,7 +49,7 @@ Numbers are unsigned and represented as integer lists. Take into consideration t
 
 Execution of examples that use functions in additionProduct64.mws:
 
-![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.JPG "Addition and product in base 64 examples")
+![alt Addition and product in base 64 examples](https://github.com/Ana06/comp-algebra/blob/master/images/additionProduct64.PNG "Addition and product in base 64 examples")
  
  
 ## chineseRemainder.mws
@@ -103,6 +103,10 @@ We use that a polynomial f is irreducible if and only if:
 
 Execution of examples that use functions in polynomialIrreducibilityTest.mws:
 
+![alt Finite field polynomial test of irreducibility - repsquaring](https://github.com/Ana06/comp-algebra/blob/master/images/polynomialIrreducibilityTest-repsquaring.PNG "Finite field polynomial test of irreducibility examples - repsquaring")
+
+![alt Finite field polynomial test of irreducibility - comp_modular](https://github.com/Ana06/comp-algebra/blob/master/images/polynomialIrreducibilityTest-comp_modular.PNG "Finite field polynomial test of irreducibility examples - comp_modular")
+
 ![alt Finite field polynomial test of irreducibility examples](https://github.com/Ana06/comp-algebra/blob/master/images/polynomialIrreducibilityTest.PNG "Finite field polynomial test of irreducibility examples")
 
 
@@ -114,7 +118,7 @@ This algorithm computes the factors (with multiplicities) of a polynomial over F
 
 An example:
 
-![alt Finite field factorization](https://github.com/vicgalle/comp-algebra/blob/master/images/finiteFieldFactor.PNG "Finite field factorization")
+![alt Finite field factorization](https://github.com/vicgalle/comp-algebra/blob/master/images/finiteFieldFactorization.PNG "Finite field factorization")
 
 
 ## berlekamp.mws
