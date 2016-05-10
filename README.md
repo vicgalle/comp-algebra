@@ -114,7 +114,7 @@ This algorithm computes the factors (with multiplicities) of a polynomial over F
 
 An example:
 
-![alt Finite field factorization](https://github.com/vicgalle/comp-algebra/blob/master/images/finiteFieldFactor.PNG "Finite field factorization")
+![alt Finite field factorization](https://github.com/vicgalle/comp-algebra/blob/master/images/finiteFieldFactorization.PNG "Finite field factorization")
 
 
 ## berlekamp.mws
